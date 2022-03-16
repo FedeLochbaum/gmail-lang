@@ -1,1 +1,1 @@
-# gmail-lang
+### Gmail query language
