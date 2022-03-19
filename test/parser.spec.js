@@ -76,7 +76,6 @@ describe('Languague / Rules / Lezer / Parser', () => {
       testParse('Trueable', 'ExprOrImplicitExpr(Expr(Variable))')
     })
 
-
     describe('Special Variable node', () => {
 
       testParse('<<x>>', 'ExprOrImplicitExpr(Expr(SpecialVariable))')
