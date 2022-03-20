@@ -6,9 +6,7 @@
 
 @top Query { Filter | Filter FilterOp Filter }
 
-@skip { whitespace }
-
-Filter { Keyword Colon Expr space Expr | FilterExpr }
+Filter { Keyword colon Expr space Expr | FilterExpr }
 
 FilterOp { Minus | Or | And }
 
@@ -17,7 +15,7 @@ Minus { minus }
 Or { or }
 And { and }
 
-Expr { Identifier | String | ExprKeyword | Number | Date | Email | lparen Expr rparen | lparen Expr space FilterOp space Expr rparen }
+Expr { ID | String | ExprKeyword | Number | Date | Email | lparen Expr rparen | lparen Expr space FilterOp space Expr rparen }
 
 Keyword {
   From | To | Cc | Bcc | Subject | Label | Has | List |
@@ -31,7 +29,7 @@ ExprKeyword {
   Reservation | Purchases | Userlabels | Nouserlabels
 }
 
-FilterExpr { Identifier | String | Email | ExactMatch }
+FilterExpr { ID | String | Email | ExactMatch }
 
 ExactMatch { "+" FilterExpr }
 
@@ -83,9 +81,23 @@ Nouserlabels { nouserlabels }
 Number { number }
 Date { date }
 Email { email }
+ID { variable }
 
 @tokens {
-  Identifier { $[a-zA-Z_\-0-9]+ }
+  @precedence {
+    number, minus, date, email, from, to, cc, bcc, subject, label, has, list, filename, after, before,
+    older, newer, older_than, newer_than, is, deliveredto, category, size, larger, smaller,
+    attachment, drive, document, spreadsheet, presentation, youtube, important, starred,
+    snoozed, unread, read, primary, social, promotions, updates, forums, reservation, purchases,
+    userlabels, nouserlabels, variable, whitespace
+  }
+
+  identifierChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] }
+  word { identifierChar (identifierChar | std.digit)* }
+  identifier { word }
+  identifierWithSpaces { lVarDelimiter ![\n]* rVarDelimiter }
+
+  variable { identifier }
   String { '"' (!["\\] | "\\" _)* '"' }
   space { $[ \t\n\r]+ }
   
@@ -93,15 +105,22 @@ Email { email }
   int  { '0' | $[1-9] std.digit* }
   frac { '.' std.digit+ }
   exp  { $[eE] $[+\-]? std.digit+ }
+  // TODO
+  date { "ble" }
+  email { "email bla" }
   // date { ^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$ }
   // email { ^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$ }
 
   lparen { "(" }
   rparen { ")" }
+  colon { ":" }
 
   minus { "-" }
   or { "or" | "OR" }
   and { "and" | "AND" }
+
+  // whitespaces
+  whitespace { std.whitespace+ }
 
   from { "from" }
   to { "to" }
@@ -110,7 +129,7 @@ Email { email }
   subject { "subject" }
   label { "label" }
   has { "has" }
-  list { "list" 
+  list { "list" }
   filename { "filename" }
   after { "after" }
   before { "before" }
@@ -125,8 +144,26 @@ Email { email }
   larger { "larger" }
   smaller { "smaller" }
 
-  // whitespaces
-  whitespace { std.whitespace+ }
+  attachment { "attachment" }
+  drive { "drive" }
+  document { "document" }
+  spreadsheet { "spreadsheet" }
+  presentation { "presentation" }
+  youtube { "youtube" }
+  important { "important" }
+  starred { "starred" }
+  snoozed { "snoozed" }
+  unread { "unread" }
+  read { "read" }
+  primary { "primary" }
+  social { "social" }
+  promotions { "promotions" }
+  updates { "updates" }
+  forums { "forums" }
+  reservation { "reservation" }
+  purchases { "purchases" }
+  userlabels { "userlabels" }
+  nouserlabels { "nouserlabels" }
 }
 
 @detectDelim
