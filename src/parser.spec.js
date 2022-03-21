@@ -97,11 +97,11 @@ describe('Gmail / parser', () => {
     })
 
     describe('newer_than', () => {
-      testParse('newer_than:2d', '')
+      testParse('newer_than:2d', 'Query(Filter(Keyword(Newer_than),Expr(ID),MatchArgument))')
     })
 
     describe('older_than', () => {
-      testParse('older_than:2d', '')
+      testParse('older_than:2d', 'Query(Filter(Keyword(Older_than),Expr(ID),MatchArgument))')
     })
 
     describe('deliveredto', () => {
@@ -136,15 +136,15 @@ describe('Gmail / parser', () => {
   describe('Operators', () => {
 
     describe('AND', () => {
-      testParse('is:important AND label:important', '')
+      testParse('is:important AND label:important', 'Query(FilterWithOp(FilterAndOp(Filter(Keyword(Is),Expr(ID),MatchArgument),Filter(Keyword(Label),Expr(ID),MatchArgument))))')
     })
 
     describe('OR', () => {
-      testParse('from:amy OR from:david', '')
+      testParse('from:amy OR from:david', 'Query(FilterWithOp(FilterOrOp(Filter(Keyword(From),Expr(ID),MatchArgument),Filter(Keyword(From),Expr(ID),MatchArgument))))')
     })
 
     describe('MINUS', () => {
-      testParse('dinner - movie', '')
+      testParse('dinner - movie', 'Query(FilterWithOp(FilterMinus(Filter(FilterExpr(ID)),Filter(FilterExpr(ID)))))')
     })
   })
 

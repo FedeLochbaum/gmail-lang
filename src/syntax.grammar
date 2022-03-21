@@ -5,28 +5,27 @@
 }
 
 @top Query { Filter | FilterWithOp }
+@skip { whitespace }
 
 Filter { Keyword colon Expr MatchArgument | FilterExpr }
 
-FilterWithOp { Filter FilterOp Filter }
+FilterWithOp { FilterOrOp | FilterAndOp | FilterMinus }
 
-MatchArgument { '' | space Expr }
+FilterOrOp { Filter !or or Filter }
+FilterAndOp { Filter !and and Filter }
+FilterMinus { Filter !minus minus Filter }
 
-FilterOp { Or | And | Minus }
+MatchArgument { '' | Expr }
 
-Minus { minus }
-Or { or }
-And { and }
-
-Expr { ID | String | Number | Date | Email | lparen Expr rparen | ExprOp }
+Expr { ID | String | Date | Number | Email | lparen Expr rparen | ExprOp }
 
 ExprOp { lparen BinaryOp rparen }
 
 BinaryOp { OrOp | AndOp | MinusOp }
 
-OrOp { Expr space !or or space Expr }
-AndOp { Expr space !and and space Expr }
-MinusOp { Expr space !minus minus space Expr }
+OrOp { Expr !or or Expr }
+AndOp { Expr !and and Expr }
+MinusOp { Expr !minus minus Expr }
 
 Keyword {
   From | To | Cc | Bcc | Subject | Label | Has | List |
@@ -68,9 +67,9 @@ ID { variable }
 
 @tokens {
   @precedence {
-    number, minus, date, email, from, to, cc, bcc, subject, label, has, list, filename, after, before,
-    older, newer, older_than, newer_than, is, deliveredto, category, size, larger, smaller,
-    variable, whitespace
+    date, number, or, and, minus, email, from, to, cc, bcc, subject, label, has, list, filename,
+    after, before, older, newer, older_than, newer_than, is, deliveredto, category, size, larger,
+    smaller, variable, whitespace
   }
 
   identifierChar { std.asciiLetter | $[\.] | $[_$\u{a1}-\u{10ffff}] }
@@ -80,16 +79,15 @@ ID { variable }
 
   variable { identifier }
   String { '"' (!["\\] | "\\" _)* '"' }
-  space { $[ \t\n\r]+ }
   
   number { ('+' | '-')? int frac? exp?  }
   int  { '0' | $[1-9] std.digit* }
   frac { '.' std.digit+ }
   exp  { $[eE] $[+\-]? std.digit+ }
-  // TODO
-  date { "ble" }
   email { "email bla" }
-  // date { ^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$ }
+  date { yearMonthDay | dayMonthYear }
+  yearMonthDay { $[int{4}] "/" $[int{2}] "/" $[int{2}] }
+  dayMonthYear { $[int{2}] "/" $[int{2}] "/" $[int{4}] }
   // email { ^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$ }
 
   lparen { "(" }
