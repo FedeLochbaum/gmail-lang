@@ -6,7 +6,9 @@
 
 @top Query { Filter | Filter FilterOp Filter }
 
-Filter { Keyword colon Expr space Expr | FilterExpr }
+Filter { Keyword colon Expr FilterArgument | FilterExpr }
+
+FilterArgument { '' | space Expr }
 
 FilterOp { Minus | Or | And }
 
@@ -25,8 +27,8 @@ Keyword {
 
 ExprKeyword {
   Attachment | Drive | Document | Spreadsheet | Presentation | Youtube | Important |
-  Starred | Snoozed | Unread | Read | Primary | Social | Promotions | Updates | Forums |
-  Reservation | Purchases | Userlabels | Nouserlabels
+  Starred | Snoozed | Unread | Read | Chat | Primary | Social | Promotions | Updates |
+  Forums | Reservation | Purchases | Userlabels | Nouserlabels
 }
 
 FilterExpr { ID | String | Email | ExactMatch }
@@ -68,6 +70,7 @@ Starred { starred }
 Snoozed { snoozed }
 Unread { unread }
 Read { read }
+Chat { chat }
 Primary { primary }
 Social { social }
 Promotions { promotions }
@@ -88,7 +91,7 @@ ID { variable }
     number, minus, date, email, from, to, cc, bcc, subject, label, has, list, filename, after, before,
     older, newer, older_than, newer_than, is, deliveredto, category, size, larger, smaller,
     attachment, drive, document, spreadsheet, presentation, youtube, important, starred,
-    snoozed, unread, read, primary, social, promotions, updates, forums, reservation, purchases,
+    snoozed, unread, read, chat, primary, social, promotions, updates, forums, reservation, purchases,
     userlabels, nouserlabels, variable, whitespace
   }
 
@@ -155,6 +158,7 @@ ID { variable }
   snoozed { "snoozed" }
   unread { "unread" }
   read { "read" }
+  chat { "chat" } 
   primary { "primary" }
   social { "social" }
   promotions { "promotions" }

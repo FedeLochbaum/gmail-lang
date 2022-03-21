@@ -3,7 +3,7 @@ import { parserWithMetadata } from './parser'
 
 export const parser = parserWithMetadata
 
-export const GmailLanguage = LRLanguage.define({
+const GmailLanguage = LRLanguage.define({
   parser: parserWithMetadata,
   languageData: {
     commentTokens: {line: ";"}
