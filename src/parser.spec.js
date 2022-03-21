@@ -77,23 +77,19 @@ describe('Gmail / parser', () => {
     })
 
     describe('after', () => {
-      testParse('after:2004/04/16', '')
-      testParse('after:04/16/2004', '')
+      testParse('after:2004/04/16', 'Query(Filter(Keyword(After),Expr(Date),MatchArgument))')
     })
 
     describe('before', () => {
-      testParse('before:2004/04/16', '')
-      testParse('before:04/16/2004', '')
+      testParse('before:2004/04/16', 'Query(Filter(Keyword(Before),Expr(Date),MatchArgument))')
     })
 
     describe('older', () => {
-      testParse('older:2004/04/16', '')
-      testParse('older:04/16/2004', '')
+      testParse('older:2004/04/16', 'Query(Filter(Keyword(Older),Expr(Date),MatchArgument))')
     })
 
     describe('newer', () => {
-      testParse('newer:2004/04/16', '')
-      testParse('newer:04/16/2004', '')
+      testParse('newer:2004/04/16', 'Query(Filter(Keyword(Newer),Expr(Date),MatchArgument))')
     })
 
     describe('newer_than', () => {
@@ -105,11 +101,11 @@ describe('Gmail / parser', () => {
     })
 
     describe('deliveredto', () => {
-      testParse('deliveredto:username@gmail.com', '')
+      testParse('deliveredto:username@gmail.com', 'Query(Filter(Keyword(Deliveredto),Expr(Email),MatchArgument))')
     })
 
     describe('list', () => {
-      testParse('list:info@example.com', '')
+      testParse('list:info@example.com', 'Query(Filter(Keyword(List),Expr(Email),MatchArgument))')
     })
 
     describe('in', () => {

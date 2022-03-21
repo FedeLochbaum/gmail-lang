@@ -84,11 +84,8 @@ ID { variable }
   int  { '0' | $[1-9] std.digit* }
   frac { '.' std.digit+ }
   exp  { $[eE] $[+\-]? std.digit+ }
-  email { "email bla" }
-  date { yearMonthDay | dayMonthYear }
-  yearMonthDay { $[int{4}] "/" $[int{2}] "/" $[int{2}] }
-  dayMonthYear { $[int{2}] "/" $[int{2}] "/" $[int{4}] }
-  // email { ^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$ }
+  date { int+ "/" int+ "/" int+ }
+  email { variable "@" variable '.' variable  }
 
   lparen { "(" }
   rparen { ")" }
