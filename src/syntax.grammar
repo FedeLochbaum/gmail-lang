@@ -1,34 +1,37 @@
 @precedence {
-  minus @left,
   and @left,
-  or @left
+  or @left,
+  minus @left
 }
 
-@top Query { Filter | Filter FilterOp Filter }
+@top Query { Filter | FilterWithOp }
 
-Filter { Keyword colon Expr FilterArgument | FilterExpr }
+Filter { Keyword colon Expr MatchArgument | FilterExpr }
 
-FilterArgument { '' | space Expr }
+FilterWithOp { Filter FilterOp Filter }
 
-FilterOp { Minus | Or | And }
+MatchArgument { '' | space Expr }
 
-// Filter Operators
+FilterOp { Or | And | Minus }
+
 Minus { minus }
 Or { or }
 And { and }
 
-Expr { ID | String | ExprKeyword | Number | Date | Email | lparen Expr rparen | lparen Expr space FilterOp space Expr rparen }
+Expr { ID | String | Number | Date | Email | lparen Expr rparen | ExprOp }
+
+ExprOp { lparen BinaryOp rparen }
+
+BinaryOp { OrOp | AndOp | MinusOp }
+
+OrOp { Expr space !or or space Expr }
+AndOp { Expr space !and and space Expr }
+MinusOp { Expr space !minus minus space Expr }
 
 Keyword {
   From | To | Cc | Bcc | Subject | Label | Has | List |
   Filename | After | Before | Older | Newer | Older_than |
   Newer_than | Is | Deliveredto | Category | Size | Larger | Smaller
-}
-
-ExprKeyword {
-  Attachment | Drive | Document | Spreadsheet | Presentation | Youtube | Important |
-  Starred | Snoozed | Unread | Read | Chat | Primary | Social | Promotions | Updates |
-  Forums | Reservation | Purchases | Userlabels | Nouserlabels
 }
 
 FilterExpr { ID | String | Email | ExactMatch }
@@ -58,29 +61,6 @@ Size { size }
 Larger { larger }
 Smaller { smaller }
 
-// Expression's Keywords
-Attachment { attachment }
-Drive { drive }
-Document { document }
-Spreadsheet { spreadsheet }
-Presentation { presentation }
-Youtube { youtube }
-Important { important }
-Starred { starred }
-Snoozed { snoozed }
-Unread { unread }
-Read { read }
-Chat { chat }
-Primary { primary }
-Social { social }
-Promotions { promotions }
-Updates { updates }
-Forums { forums }
-Reservation { reservation }
-Purchases { purchases }
-Userlabels { userlabels }
-Nouserlabels { nouserlabels }
-
 Number { number }
 Date { date }
 Email { email }
@@ -90,12 +70,10 @@ ID { variable }
   @precedence {
     number, minus, date, email, from, to, cc, bcc, subject, label, has, list, filename, after, before,
     older, newer, older_than, newer_than, is, deliveredto, category, size, larger, smaller,
-    attachment, drive, document, spreadsheet, presentation, youtube, important, starred,
-    snoozed, unread, read, chat, primary, social, promotions, updates, forums, reservation, purchases,
-    userlabels, nouserlabels, variable, whitespace
+    variable, whitespace
   }
 
-  identifierChar { std.asciiLetter | $[_$\u{a1}-\u{10ffff}] }
+  identifierChar { std.asciiLetter | $[\.] | $[_$\u{a1}-\u{10ffff}] }
   word { identifierChar (identifierChar | std.digit)* }
   identifier { word }
   identifierWithSpaces { lVarDelimiter ![\n]* rVarDelimiter }
@@ -146,28 +124,6 @@ ID { variable }
   size { "size" }
   larger { "larger" }
   smaller { "smaller" }
-
-  attachment { "attachment" }
-  drive { "drive" }
-  document { "document" }
-  spreadsheet { "spreadsheet" }
-  presentation { "presentation" }
-  youtube { "youtube" }
-  important { "important" }
-  starred { "starred" }
-  snoozed { "snoozed" }
-  unread { "unread" }
-  read { "read" }
-  chat { "chat" } 
-  primary { "primary" }
-  social { "social" }
-  promotions { "promotions" }
-  updates { "updates" }
-  forums { "forums" }
-  reservation { "reservation" }
-  purchases { "purchases" }
-  userlabels { "userlabels" }
-  nouserlabels { "nouserlabels" }
 }
 
 @detectDelim

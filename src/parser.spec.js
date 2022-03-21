@@ -18,62 +18,62 @@ describe('Gmail / parser', () => {
   describe('keyword', () => {
 
     describe('from', () => {
-      testParse('from:amy', 'Query(Filter(Keyword(From),Expr(ID),FilterArgument))')
+      testParse('from:amy', 'Query(Filter(Keyword(From),Expr(ID),MatchArgument))')
     })
 
     describe('to', () => {
-      testParse('to:david', 'Query(Filter(Keyword(To),Expr(ID),FilterArgument))')
+      testParse('to:david', 'Query(Filter(Keyword(To),Expr(ID),MatchArgument))')
     })
 
     describe('cc', () => {
-      testParse('cc:david', 'Query(Filter(Keyword(Cc),Expr(ID),FilterArgument))')
+      testParse('cc:david', 'Query(Filter(Keyword(Cc),Expr(ID),MatchArgument))')
     })
 
     describe('bcc', () => {
-      testParse('bcc:david', 'Query(Filter(Keyword(Bcc),Expr(ID),FilterArgument))')
+      testParse('bcc:david', 'Query(Filter(Keyword(Bcc),Expr(ID),MatchArgument))')
     })
 
     describe('label', () => {
-      testParse('label:friends', 'Query(Filter(Keyword(Label),Expr(ID),FilterArgument))')
+      testParse('label:friends', 'Query(Filter(Keyword(Label),Expr(ID),MatchArgument))')
     })
 
     describe('subject', () => {
-      testParse('subject:dinner', 'Query(Filter(Keyword(Subject),Expr(ID),FilterArgument))')
-      testParse('subject:(dinner movie)', '')
+      testParse('subject:dinner', 'Query(Filter(Keyword(Subject),Expr(ID),MatchArgument))')
+      testParse('subject:(dinner OR movie)', 'Query(Filter(Keyword(Subject),Expr(ExprOp(BinaryOp(OrOp(Expr(ID),Expr(ID))))),MatchArgument))')
     })
     
     describe('has', () => {
-      testParse('has:attachment', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Attachment)),FilterArgument))')
-      testParse('has:drive', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Drive)),FilterArgument))')
-      testParse('has:document', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Document)),FilterArgument))')
-      testParse('has:spreadsheet', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Spreadsheet)),FilterArgument))')
-      testParse('has:presentation', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Presentation)),FilterArgument))')
-      testParse('has:youtube', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Youtube)),FilterArgument))')
-      testParse('has:userlabels', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Userlabels)),FilterArgument))')
-      testParse('has:nouserlabels', 'Query(Filter(Keyword(Has),Expr(ExprKeyword(Nouserlabels)),FilterArgument))')
+      testParse('has:attachment', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
+      testParse('has:drive', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
+      testParse('has:document', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
+      testParse('has:spreadsheet', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
+      testParse('has:presentation', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
+      testParse('has:youtube', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
+      testParse('has:userlabels', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
+      testParse('has:nouserlabels', 'Query(Filter(Keyword(Has),Expr(ID),MatchArgument))')
     })
 
     describe('is', () => {
-      testParse('is:starred', 'Query(Filter(Keyword(Is),Expr(ExprKeyword(Starred)),FilterArgument))')
-      testParse('is:snoozed', 'Query(Filter(Keyword(Is),Expr(ExprKeyword(Snoozed)),FilterArgument))')
-      testParse('is:unread', 'Query(Filter(Keyword(Is),Expr(ExprKeyword(Unread)),FilterArgument))')
-      testParse('is:read', 'Query(Filter(Keyword(Is),Expr(ExprKeyword(Read)),FilterArgument))')
-      testParse('is:chat movie', 'Query(Filter(Keyword(Is),Expr(ExprKeyword(Chat)),FilterArgument(Expr(ID))))')
+      testParse('is:starred', 'Query(Filter(Keyword(Is),Expr(ID),MatchArgument))')
+      testParse('is:snoozed', 'Query(Filter(Keyword(Is),Expr(ID),MatchArgument))')
+      testParse('is:unread', 'Query(Filter(Keyword(Is),Expr(ID),MatchArgument))')
+      testParse('is:read', 'Query(Filter(Keyword(Is),Expr(ID),MatchArgument))')
+      testParse('is:chat movie', 'Query(Filter(Keyword(Is),Expr(ID),MatchArgument(Expr(ID))))')
     })
 
     describe('category', () => {
-      testParse('category:primary', 'Query(Filter(Keyword(Category),Expr(ExprKeyword(Primary)),FilterArgument))')
-      testParse('category:social', 'Query(Filter(Keyword(Category),Expr(ExprKeyword(Social)),FilterArgument))')
-      testParse('category:promotions', 'Query(Filter(Keyword(Category),Expr(ExprKeyword(Promotions)),FilterArgument))')
-      testParse('category:updates', 'Query(Filter(Keyword(Category),Expr(ExprKeyword(Updates)),FilterArgument))')
-      testParse('category:forums', 'Query(Filter(Keyword(Category),Expr(ExprKeyword(Forums)),FilterArgument))')
-      testParse('category:reservations', 'Query(Filter(Keyword(Category),Expr(ExprKeyword(Reservations)),FilterArgument))')
-      testParse('category:purchases', 'Query(Filter(Keyword(Category),Expr(ExprKeyword(Purchases)),FilterArgument))')
+      testParse('category:primary', 'Query(Filter(Keyword(Category),Expr(ID),MatchArgument))')
+      testParse('category:social', 'Query(Filter(Keyword(Category),Expr(ID),MatchArgument))')
+      testParse('category:promotions', 'Query(Filter(Keyword(Category),Expr(ID),MatchArgument))')
+      testParse('category:updates', 'Query(Filter(Keyword(Category),Expr(ID),MatchArgument))')
+      testParse('category:forums', 'Query(Filter(Keyword(Category),Expr(ID),MatchArgument))')
+      testParse('category:reservations', 'Query(Filter(Keyword(Category),Expr(ID),MatchArgument))')
+      testParse('category:purchases', 'Query(Filter(Keyword(Category),Expr(ID),MatchArgument))')
     })
 
     describe('filename', () => {
-      testParse('filename:pdf', 'Query(Filter(Keyword(Filename),Expr(ID),FilterArgument))')
-      testParse('filename:homework.txt', 'Query(Filter(Keyword(Filename),Expr(ID),FilterArgument))')
+      testParse('filename:pdf', 'Query(Filter(Keyword(Filename),Expr(ID),MatchArgument))')
+      testParse('filename:homework.txt', 'Query(Filter(Keyword(Filename),Expr(ID),MatchArgument))')
     })
 
     describe('after', () => {
@@ -117,7 +117,7 @@ describe('Gmail / parser', () => {
     })
     
     describe('size', () => {
-      testParse('size:1000000', 'Query(Filter(Keyword(Size),Expr(Number),FilterArgument))')
+      testParse('size:1000000', 'Query(Filter(Keyword(Size),Expr(Number),MatchArgument))')
     })
 
     describe('larger', () => {
