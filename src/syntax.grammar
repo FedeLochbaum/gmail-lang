@@ -1,35 +1,39 @@
 @precedence {
-  minus @left,
   and @left,
-  or @left
+  or @left,
+  minus @left
 }
 
-@top Query { Filter | Filter FilterOp Filter }
+@top Query { Filter | FilterWithOp }
+@skip { whitespace }
 
-Filter { Keyword Colon Expr space Expr | FilterExpr }
+Filter { Keyword colon Expr MatchArgument | FilterExpr }
 
-FilterOp { Minus | Or | And }
+FilterWithOp { FilterOrOp | FilterAndOp | FilterMinus }
 
-// Filter Operators
-Minus { minus }
-Or { or }
-And { and }
+FilterOrOp { Filter !or or Filter }
+FilterAndOp { Filter !and and Filter }
+FilterMinus { Filter !minus minus Filter }
 
-Expr { Identifier | String | ExprKeyword | Number | Date | Email | lparen Expr rparen | lparen Expr space FilterOp space Expr rparen }
+MatchArgument { '' | Expr }
+
+Expr { ID | String | Date | Number | Email | lparen Expr rparen | ExprOp }
+
+ExprOp { lparen BinaryOp rparen }
+
+BinaryOp { OrOp | AndOp | MinusOp }
+
+OrOp { Expr !or or Expr }
+AndOp { Expr !and and Expr }
+MinusOp { Expr !minus minus Expr }
 
 Keyword {
   From | To | Cc | Bcc | Subject | Label | Has | List |
   Filename | After | Before | Older | Newer | Older_than |
-  Newer_than | Is | Deliveredto | Category | Size | Larger | Smaller
+  Newer_than | Is | In | Deliveredto | Category | Size | Larger | Smaller
 }
 
-ExprKeyword {
-  Attachment | Drive | Document | Spreadsheet | Presentation | Youtube | Important |
-  Starred | Snoozed | Unread | Read | Primary | Social | Promotions | Updates | Forums |
-  Reservation | Purchases | Userlabels | Nouserlabels
-}
-
-FilterExpr { Identifier | String | Email | ExactMatch }
+FilterExpr { ID | String | Email | ExactMatch }
 
 ExactMatch { "+" FilterExpr }
 
@@ -50,56 +54,53 @@ Newer { newer }
 Older_than { older_than }
 Newer_than { newer_than }
 Is { is }
+In { in }
 Deliveredto { deliveredto }
 Category { category }
 Size { size }
 Larger { larger }
 Smaller { smaller }
 
-// Expression's Keywords
-Attachment { attachment }
-Drive { drive }
-Document { document }
-Spreadsheet { spreadsheet }
-Presentation { presentation }
-Youtube { youtube }
-Important { important }
-Starred { starred }
-Snoozed { snoozed }
-Unread { unread }
-Read { read }
-Primary { primary }
-Social { social }
-Promotions { promotions }
-Updates { updates }
-Forums { forums }
-Reservation { reservation }
-Purchases { purchases }
-Userlabels { userlabels }
-Nouserlabels { nouserlabels }
-
 Number { number }
 Date { date }
 Email { email }
+ID { variable }
 
 @tokens {
-  Identifier { $[a-zA-Z_\-0-9]+ }
-  String { '"' (!["\\] | "\\" _)* '"' }
-  space { $[ \t\n\r]+ }
-  
-  snumber { ('+' | '-')? int frac? exp?  }
-  int  { '0' | $[1-9] std.digit* }
-  frac { '.' std.digit+ }
-  exp  { $[eE] $[+\-]? std.digit+ }
-  date { /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/ }
-  email { /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ }
+  @precedence {
+    date, number, or, and, minus, email, from, to, cc, bcc, subject, label, has, list, filename,
+    after, before, older, newer, older_than, newer_than, is, in, deliveredto, category, size, larger,
+    smaller, variable, whitespace
+  }
 
+  identifierChar { std.asciiLetter | $[\.] | $[_$\u{a1}-\u{10ffff}] }
+  word { identifierChar (identifierChar | std.digit)* }
+  identifier { word }
+  identifierWithSpaces { lVarDelimiter ![\n]* rVarDelimiter }
+
+  variable { identifier }
+  String { '"' (!["\\] | "\\" _)* '"' }
+  
+  number { ('+' | '-')? int frac? exp?  }
+  int  { '0' | $[1-9] std.digit* }
+  frac { dot std.digit+ }
+  exp  { $[eE] $[+\-]? std.digit+ }
+  date { dateFormat | shortDate }
+  dateFormat { int+ "/" int+ "/" int+ }
+  shortDate { std.digit+ std.asciiLetter }
+  email { variable "@" variable dot variable  }
+  
   lparen { "(" }
   rparen { ")" }
+  colon { ":" }
+  dot { '.' }
 
   minus { "-" }
   or { "or" | "OR" }
   and { "and" | "AND" }
+
+  // whitespaces
+  whitespace { std.whitespace+ }
 
   from { "from" }
   to { "to" }
@@ -108,7 +109,7 @@ Email { email }
   subject { "subject" }
   label { "label" }
   has { "has" }
-  list { "list" 
+  list { "list" }
   filename { "filename" }
   after { "after" }
   before { "before" }
@@ -117,6 +118,7 @@ Email { email }
   older_than { "older_than" }
   newer_than { "newer_than" }
   is { "is" }
+  in { "in" }
   deliveredto { "deliveredto" }
   category { "category" }
   size { "size" }

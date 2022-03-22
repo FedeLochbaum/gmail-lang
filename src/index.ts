@@ -1,13 +1,12 @@
-import {LRLanguage, LanguageSupport, indentNodeProp, foldNodeProp, foldInside, delimitedIndent} from "@codemirror/language"
+import {LRLanguage, LanguageSupport } from "@codemirror/language"
+import { Extension } from "@codemirror/state"
 import { parserWithMetadata } from './parser'
 
 export const parser = parserWithMetadata
 
-export const GmailLanguage = LRLanguage.define({
+const GmailLanguage = LRLanguage.define({
   parser: parserWithMetadata,
-  languageData: {
-    commentTokens: {line: ";"}
-  }
+  languageData: {}
 })
 
-export default () => new LanguageSupport(GmailLanguage)
+export default (extensions: [Extension]) => new LanguageSupport(GmailLanguage, extensions)
