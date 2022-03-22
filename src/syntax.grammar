@@ -83,16 +83,17 @@ ID { variable }
   
   number { ('+' | '-')? int frac? exp?  }
   int  { '0' | $[1-9] std.digit* }
-  frac { '.' std.digit+ }
+  frac { dot std.digit+ }
   exp  { $[eE] $[+\-]? std.digit+ }
   date { dateFormat | shortDate }
   dateFormat { int+ "/" int+ "/" int+ }
   shortDate { std.digit+ std.asciiLetter }
-  email { variable "@" variable '.' variable  }
-
+  email { variable "@" variable dot variable  }
+  
   lparen { "(" }
   rparen { ")" }
   colon { ":" }
+  dot { '.' }
 
   minus { "-" }
   or { "or" | "OR" }

@@ -5,9 +5,7 @@ export const parser = parserWithMetadata
 
 const GmailLanguage = LRLanguage.define({
   parser: parserWithMetadata,
-  languageData: {
-    commentTokens: {line: ";"}
-  }
+  languageData: {}
 })
 
 export default () => new LanguageSupport(GmailLanguage)
