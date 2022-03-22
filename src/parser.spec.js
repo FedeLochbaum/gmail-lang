@@ -148,7 +148,7 @@ describe('Gmail / parser', () => {
       testParse('(is:important AND label:important)', 'Query(QueryFilter(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchArgument(NoArgument))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchArgument(NoArgument))))))))')
       testParse('(is:important AND label:important) OR larger:10M', 'Query(QueryFilter(CompositeFilter(OR(QueryFilter(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchArgument(NoArgument))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchArgument(NoArgument))))))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchArgument(NoArgument)))))))')
       testParse('is:important AND (label:important OR larger:10M)', 'Query(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchArgument(NoArgument))),QueryFilter(QueryFilter(CompositeFilter(OR(QueryFilter(Filter(Keyword(Label),Expr(ID),MatchArgument(NoArgument))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchArgument(NoArgument)))))))))))')
-      testParse('is:important AND (label:important OR larger:10M) matchLabel', '')
+      testParse('(is:important AND (label:important OR larger:10M)) matchLabel', '')
     })
   })
 

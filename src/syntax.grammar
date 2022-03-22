@@ -32,38 +32,14 @@ AndOp[@name=AND] { Expr !and and Expr }
 MinusOp[@name=MINUS] { Expr !minus minus Expr }
 
 Keyword {
-  From | To | Cc | Bcc | Subject | Label | Has | List |
-  Filename | After | Before | Older | Newer | OlderThan |
-  NewerThan | Is | In | Deliveredto | Category | Size | Larger | Smaller
+  from | to | cc | bcc | subject | label | has | list |
+  filename | after | before | older | newer | older_than |
+  newer_than | is | in | deliveredto | category | size | larger | smaller
 }
 
 FilterExpr { ID | String | Email | ExactMatch }
 
 ExactMatch { "+" FilterExpr }
-
-// Filter Keywords
-From { from }
-To { to }
-Cc { cc }
-Bcc { bcc }
-Subject { subject }
-Label { label }
-Has { has }
-List { list }
-Filename { filename }
-After { after }
-Before { before }
-Older { older }
-Newer { newer }
-OlderThan { older_than }
-NewerThan { newer_than }
-Is { is }
-In { in }
-Deliveredto { deliveredto }
-Category { category }
-Size { size }
-Larger { larger }
-Smaller { smaller }
 
 Number { number }
 Date { date }
@@ -106,28 +82,28 @@ ShortID { shortVariable }
   // whitespaces
   whitespace { std.whitespace+ }
 
-  from { "from" }
-  to { "to" }
-  cc { "cc" }
-  bcc { "bcc" }
-  subject { "subject" }
-  label { "label" }
-  has { "has" }
-  list { "list" }
-  filename { "filename" }
-  after { "after" }
-  before { "before" }
-  older { "older" }
-  newer { "newer" }
-  older_than { "older_than" }
-  newer_than { "newer_than" }
-  is { "is" }
-  in { "in" }
-  deliveredto { "deliveredto" }
-  category { "category" }
-  size { "size" }
-  larger { "larger" }
-  smaller { "smaller" }
+  from[@name=From] { "from" }
+  to[@name=To] { "to" }
+  cc[@name=Cc] { "cc" }
+  bcc[@name=Bcc] { "bcc" }
+  subject[@name=Subject] { "subject" }
+  label[@name=Label] { "label" }
+  has[@name=Has] { "has" }
+  list[@name=List] { "list" }
+  filename[@name=Filename] { "filename" }
+  after[@name=After] { "after" }
+  before[@name=Before] { "before" }
+  older[@name=Older] { "older" }
+  newer[@name=Newer] { "newer" }
+  older_than[@name=OlderThan] { "older_than" }
+  newer_than[@name=NewerThan] { "newer_than" }
+  is[@name=Is] { "is" }
+  in[@name=In] { "in" }
+  deliveredto[@name=Deliveredto] { "deliveredto" }
+  category[@name=Category] { "category" }
+  size[@name=Size] { "size" }
+  larger[@name=Larger] { "larger" }
+  smaller[@name=Smaller] { "smaller" }
 }
 
 @detectDelim
