@@ -30,7 +30,7 @@ MinusOp { Expr !minus minus Expr }
 Keyword {
   From | To | Cc | Bcc | Subject | Label | Has | List |
   Filename | After | Before | Older | Newer | Older_than |
-  Newer_than | Is | Deliveredto | Category | Size | Larger | Smaller
+  Newer_than | Is | In | Deliveredto | Category | Size | Larger | Smaller
 }
 
 FilterExpr { ID | String | Email | ExactMatch }
@@ -54,6 +54,7 @@ Newer { newer }
 Older_than { older_than }
 Newer_than { newer_than }
 Is { is }
+In { in }
 Deliveredto { deliveredto }
 Category { category }
 Size { size }
@@ -68,7 +69,7 @@ ID { variable }
 @tokens {
   @precedence {
     date, number, or, and, minus, email, from, to, cc, bcc, subject, label, has, list, filename,
-    after, before, older, newer, older_than, newer_than, is, deliveredto, category, size, larger,
+    after, before, older, newer, older_than, newer_than, is, in, deliveredto, category, size, larger,
     smaller, variable, whitespace
   }
 
@@ -84,7 +85,9 @@ ID { variable }
   int  { '0' | $[1-9] std.digit* }
   frac { '.' std.digit+ }
   exp  { $[eE] $[+\-]? std.digit+ }
-  date { int+ "/" int+ "/" int+ }
+  date { dateFormat | shortDate }
+  dateFormat { int+ "/" int+ "/" int+ }
+  shortDate { std.digit+ std.asciiLetter }
   email { variable "@" variable '.' variable  }
 
   lparen { "(" }
@@ -114,6 +117,7 @@ ID { variable }
   older_than { "older_than" }
   newer_than { "newer_than" }
   is { "is" }
+  in { "in" }
   deliveredto { "deliveredto" }
   category { "category" }
   size { "size" }

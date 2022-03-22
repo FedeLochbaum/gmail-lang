@@ -93,11 +93,11 @@ describe('Gmail / parser', () => {
     })
 
     describe('newer_than', () => {
-      testParse('newer_than:2d', 'Query(Filter(Keyword(Newer_than),Expr(ID),MatchArgument))')
+      testParse('newer_than:2d', 'Query(Filter(Keyword(Newer_than),Expr(Date),MatchArgument))')
     })
 
     describe('older_than', () => {
-      testParse('older_than:2d', 'Query(Filter(Keyword(Older_than),Expr(ID),MatchArgument))')
+      testParse('older_than:2d', 'Query(Filter(Keyword(Older_than),Expr(Date),MatchArgument))')
     })
 
     describe('deliveredto', () => {
@@ -109,7 +109,7 @@ describe('Gmail / parser', () => {
     })
 
     describe('in', () => {
-      testParse('in:anywhere movie', '')
+      testParse('in:anywhere movie', 'Query(Filter(Keyword(In),Expr(ID),MatchArgument(Expr(ID))))')
     })
     
     describe('size', () => {
@@ -117,11 +117,11 @@ describe('Gmail / parser', () => {
     })
 
     describe('larger', () => {
-      testParse('larger:10M', '')
+      testParse('larger:10M', 'Query(Filter(Keyword(Larger),Expr(Date),MatchArgument))')
     })
     
     describe('smaller', () => {
-      testParse('smaller:10M', '')
+      testParse('smaller:10M', 'Query(Filter(Keyword(Smaller),Expr(Date),MatchArgument))')
     })
   })
 
