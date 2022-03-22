@@ -4,33 +4,37 @@
   minus @left
 }
 
-@top Query { Filter | FilterWithOp }
+@top Query { QueryFilter }
 @skip { whitespace }
+
+QueryFilter { Filter | CompositeFilter | lparen QueryFilter rparen }
 
 Filter { Keyword colon Expr MatchArgument | FilterExpr }
 
-FilterWithOp { FilterOrOp | FilterAndOp | FilterMinus }
+CompositeFilter { FilterOrOp | FilterAndOp | FilterMinus }
 
-FilterOrOp { Filter !or or Filter }
-FilterAndOp { Filter !and and Filter }
-FilterMinus { Filter !minus minus Filter }
+FilterOrOp[@name=OR] { QueryFilter !or or QueryFilter }
+FilterAndOp[@name=AND] { QueryFilter !and and QueryFilter }
+FilterMinus[@name=MINUS] { QueryFilter !minus minus QueryFilter }
 
-MatchArgument { '' | Expr }
+MatchArgument { NoArgument | Argument }
+NoArgument { '' }
+Argument { Expr }
 
-Expr { ID | String | Date | Number | Email | lparen Expr rparen | ExprOp }
+Expr { ID | String | ShortID | Date | Number | Email | lparen Expr rparen | ExprOp }
 
 ExprOp { lparen BinaryOp rparen }
 
 BinaryOp { OrOp | AndOp | MinusOp }
 
-OrOp { Expr !or or Expr }
-AndOp { Expr !and and Expr }
-MinusOp { Expr !minus minus Expr }
+OrOp[@name=OR] { Expr !or or Expr }
+AndOp[@name=AND] { Expr !and and Expr }
+MinusOp[@name=MINUS] { Expr !minus minus Expr }
 
 Keyword {
   From | To | Cc | Bcc | Subject | Label | Has | List |
-  Filename | After | Before | Older | Newer | Older_than |
-  Newer_than | Is | In | Deliveredto | Category | Size | Larger | Smaller
+  Filename | After | Before | Older | Newer | OlderThan |
+  NewerThan | Is | In | Deliveredto | Category | Size | Larger | Smaller
 }
 
 FilterExpr { ID | String | Email | ExactMatch }
@@ -51,8 +55,8 @@ After { after }
 Before { before }
 Older { older }
 Newer { newer }
-Older_than { older_than }
-Newer_than { newer_than }
+OlderThan { older_than }
+NewerThan { newer_than }
 Is { is }
 In { in }
 Deliveredto { deliveredto }
@@ -65,12 +69,13 @@ Number { number }
 Date { date }
 Email { email }
 ID { variable }
+ShortID { shortVariable }
 
 @tokens {
   @precedence {
     date, number, or, and, minus, email, from, to, cc, bcc, subject, label, has, list, filename,
     after, before, older, newer, older_than, newer_than, is, in, deliveredto, category, size, larger,
-    smaller, variable, whitespace
+    smaller, variable, shortVariable, whitespace
   }
 
   identifierChar { std.asciiLetter | $[\.] | $[_$\u{a1}-\u{10ffff}] }
@@ -80,15 +85,14 @@ ID { variable }
 
   variable { identifier }
   String { '"' (!["\\] | "\\" _)* '"' }
-  
   number { ('+' | '-')? int frac? exp?  }
   int  { '0' | $[1-9] std.digit* }
   frac { dot std.digit+ }
   exp  { $[eE] $[+\-]? std.digit+ }
-  date { dateFormat | shortDate }
+  date { dateFormat }
   dateFormat { int+ "/" int+ "/" int+ }
-  shortDate { std.digit+ std.asciiLetter }
   email { variable "@" variable dot variable  }
+  shortVariable { std.digit+ std.asciiLetter }
   
   lparen { "(" }
   rparen { ")" }
