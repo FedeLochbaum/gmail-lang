@@ -1,15 +1,12 @@
-@precedence {
-  and @left,
-  or @left,
-  minus @left
-}
+@precedence { and @left, or @left, minus @left }
 
 @top Query { QueryFilter }
+
 @skip { whitespace }
 
 QueryFilter { Filter | CompositeFilter | lparen QueryFilter rparen }
 
-Filter { Keyword colon Expr MatchArgument | FilterExpr }
+Filter { Keyword colon Expr MatchFilter | FilterExpr }
 
 CompositeFilter { FilterOrOp | FilterAndOp | FilterMinus }
 
@@ -17,9 +14,8 @@ FilterOrOp[@name=OR] { QueryFilter !or or QueryFilter }
 FilterAndOp[@name=AND] { QueryFilter !and and QueryFilter }
 FilterMinus[@name=MINUS] { QueryFilter !minus minus QueryFilter }
 
-MatchArgument { NoArgument | Argument }
-NoArgument { '' }
-Argument { Expr }
+MatchFilter { Empty | Expr }
+Empty { '' }
 
 Expr { ID | String | ShortID | Date | Number | Email | lparen Expr rparen | ExprOp }
 
