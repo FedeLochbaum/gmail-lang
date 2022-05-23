@@ -1,21 +1,27 @@
-@precedence { and @left, or @left, minus @left }
+@precedence {
+  and @left,
+  or @left,
+  minus @left,
+  cut @cut
+}
 
 @top Query { QueryFilter }
 
 @skip { whitespace }
 
-QueryFilter { Filter | CompositeFilter | lparen QueryFilter rparen }
+QueryFilter { Filter MatchFilter? | lparen QueryFilter rparen | FilterExpr }
 
-Filter { Keyword colon Expr MatchFilter | FilterExpr }
+Filter { KeywordFilter | CompositeFilter }
+
+KeywordFilter { Keyword colon Expr }
 
 CompositeFilter { FilterOrOp | FilterAndOp | FilterMinus }
 
-FilterOrOp[@name=OR] { QueryFilter !or or QueryFilter }
-FilterAndOp[@name=AND] { QueryFilter !and and QueryFilter }
-FilterMinus[@name=MINUS] { QueryFilter !minus minus QueryFilter }
+FilterOrOp[@name=OR] { lparen QueryFilter !or or QueryFilter rparen }
+FilterAndOp[@name=AND] { lparen QueryFilter !and and QueryFilter rparen }
+FilterMinus[@name=MINUS] { lparen QueryFilter !minus minus QueryFilter rparen }
 
-MatchFilter { Empty | Expr }
-Empty { '' }
+MatchFilter { Expr }
 
 Expr { ID | String | ShortID | Date | Number | Email | lparen Expr rparen | ExprOp }
 
@@ -33,9 +39,11 @@ Keyword {
   newer_than | is | in | deliveredto | category | size | larger | smaller
 }
 
-FilterExpr { ID | String | Email | ExactMatch }
+FilterExpr { FilterValue | ExactMatch }
 
-ExactMatch { "+" FilterExpr }
+FilterValue { ID | String | Email }
+
+ExactMatch { "+" FilterValue }
 
 Number { number }
 Date { date }
@@ -47,7 +55,7 @@ ShortID { shortVariable }
   @precedence {
     date, number, or, and, minus, email, from, to, cc, bcc, subject, label, has, list, filename,
     after, before, older, newer, older_than, newer_than, is, in, deliveredto, category, size, larger,
-    smaller, variable, shortVariable, whitespace
+    smaller, empty, variable, shortVariable, whitespace
   }
 
   identifierChar { std.asciiLetter | $[\.] | $[_$\u{a1}-\u{10ffff}] }
