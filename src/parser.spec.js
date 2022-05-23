@@ -38,42 +38,52 @@ describe('Gmail / parser', () => {
     })
 
     describe('subject', () => {
-      testParse('subject:dinner', 'Query(QueryFilter(Filter(Keyword(Subject),Expr(ID),MatchFilter(Empty))))')
-      testParse('subject:(dinner OR movie)', 'Query(QueryFilter(Filter(Keyword(Subject),Expr(ExprOp(BinaryOp(OR(Expr(ID),Expr(ID))))),MatchFilter(Empty))))')
+      [
+        ['subject:dinner', 'Query(QueryFilter(Filter(Keyword(Subject),Expr(ID),MatchFilter(Empty))))'],
+        ['subject:(dinner OR movie)', 'Query(QueryFilter(Filter(Keyword(Subject),Expr(ExprOp(BinaryOp(OR(Expr(ID),Expr(ID))))),MatchFilter(Empty))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
     
     describe('has', () => {
-      testParse('has:attachment', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
-      testParse('has:drive', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
-      testParse('has:document', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
-      testParse('has:spreadsheet', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
-      testParse('has:presentation', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
-      testParse('has:youtube', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
-      testParse('has:userlabels', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
-      testParse('has:nouserlabels', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))')
+      [
+        ['has:attachment', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))'],
+        ['has:drive', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))'],
+        ['has:document', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))'],
+        ['has:spreadsheet', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))'],
+        ['has:presentation', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))'],
+        ['has:youtube', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))'],
+        ['has:userlabels', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))'],
+        ['has:nouserlabels', 'Query(QueryFilter(Filter(Keyword(Has),Expr(ID),MatchFilter(Empty))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('is', () => {
-      testParse('is:starred', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))')
-      testParse('is:snoozed', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))')
-      testParse('is:unread', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))')
-      testParse('is:read', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))')
-      testParse('is:chat movie', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Expr(ID)))))')
+      [
+        ['is:starred', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))'],
+        ['is:snoozed', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))'],
+        ['is:unread', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))'],
+        ['is:read', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))))'],
+        ['is:chat movie', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Expr(ID)))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('category', () => {
-      testParse('category:primary', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))')
-      testParse('category:social', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))')
-      testParse('category:promotions', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))')
-      testParse('category:updates', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))')
-      testParse('category:forums', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))')
-      testParse('category:reservations', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))')
-      testParse('category:purchases', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))')
+      [
+        ['category:primary', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))'],
+        ['category:social', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))'],
+        ['category:promotions', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))'],
+        ['category:updates', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))'],
+        ['category:forums', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))'],
+        ['category:reservations', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))'],
+        ['category:purchases', 'Query(QueryFilter(Filter(Keyword(Category),Expr(ID),MatchFilter(Empty))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('filename', () => {
-      testParse('filename:pdf', 'Query(QueryFilter(Filter(Keyword(Filename),Expr(ID),MatchFilter(Empty))))')
-      testParse('filename:homework.txt', 'Query(QueryFilter(Filter(Keyword(Filename),Expr(ID),MatchFilter(Empty))))')
+      [
+        ['filename:pdf', 'Query(QueryFilter(Filter(Keyword(Filename),Expr(ID),MatchFilter(Empty))))'],
+        ['filename:homework.txt', 'Query(QueryFilter(Filter(Keyword(Filename),Expr(ID),MatchFilter(Empty))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('after', () => {
@@ -140,15 +150,22 @@ describe('Gmail / parser', () => {
     })
 
     describe('MINUS', () => {
-      testParse('dinner - movie', 'Query(QueryFilter(CompositeFilter(MINUS(QueryFilter(Filter(FilterExpr(ID))),QueryFilter(Filter(FilterExpr(ID)))))))')
-      testParse('from:amy - from:david', 'Query(QueryFilter(CompositeFilter(MINUS(QueryFilter(Filter(Keyword(From),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(From),Expr(ID),MatchFilter(Empty)))))))')
+      [
+        ['dinner - movie', 'Query(QueryFilter(CompositeFilter(MINUS(QueryFilter(Filter(FilterExpr(ID))),QueryFilter(Filter(FilterExpr(ID)))))))'],
+        ['from:amy - from:david', 'Query(QueryFilter(CompositeFilter(MINUS(QueryFilter(Filter(Keyword(From),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(From),Expr(ID),MatchFilter(Empty)))))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('complex queries', () => {
-      testParse('(is:important AND label:important)', 'Query(QueryFilter(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))))))))')
-      testParse('(is:important AND label:important) OR larger:10M', 'Query(QueryFilter(CompositeFilter(OR(QueryFilter(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))))))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchFilter(Empty)))))))')
-      testParse('is:important AND (label:important OR larger:10M)', 'Query(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(QueryFilter(CompositeFilter(OR(QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchFilter(Empty)))))))))))')
-      testParse('(is:important AND (label:important OR larger:10M)) matchLabel', '') // TODO: No supported yet
+      [
+        // ['(is:important AND label:important)', 'Query(QueryFilter(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))))))))'],
+        // ['is:important bla', 'Query(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Expr(ID)))))'],
+        // ['is:important AND label:important bla', 'Query(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Expr(ID))))))))'],
+        ['(is:important AND label:important) bla', ''],
+        // ['(is:important AND label:important) OR larger:10M', 'Query(QueryFilter(CompositeFilter(OR(QueryFilter(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))))))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchFilter(Empty)))))))'],
+        // ['is:important AND (label:important OR larger:10M)', 'Query(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(QueryFilter(CompositeFilter(OR(QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchFilter(Empty)))))))))))'],
+        // ['is:important AND (label:important OR larger:10M) matchLabel', '']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
   })
 
