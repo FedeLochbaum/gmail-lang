@@ -40,7 +40,6 @@ describe('Gmail / parser', () => {
     describe('subject', () => {
       [
         ['subject:dinner', 'Query(QueryFilter(Filter(KeywordFilter(Keyword(Subject),Expr(ID)))))'],
-        // ['subject:(dinner OR movie)', 'Query(QueryFilter(Filter(KeywordFilter(Keyword(Subject),Expr(ExprOp(BinaryOp(OR(Expr(ID),Expr(ID)))))))))']
       ].forEach(([source, expetec]) => testParse(source, expetec))
     })
     
@@ -142,29 +141,32 @@ describe('Gmail / parser', () => {
   describe('Operators', () => {
 
     describe('AND', () => {
-      testParse('is:important AND label:important', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID)))))))')
+      [
+        ['is:important AND label:important', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID)))))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('OR', () => {
-      testParse('from:amy OR from:david', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(From),Expr(ID))),Union,Filter(KeywordFilter(Keyword(From),Expr(ID)))))))')
+      [
+        ['from:amy OR from:david', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(From),Expr(ID))),Union,Filter(KeywordFilter(Keyword(From),Expr(ID)))))))']
+      ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('MINUS', () => {
       [
-        // ['dinner - movie', 'Query(QueryFilter(CompositeFilter(MINUS(QueryFilter(Filter(FilterExpr(ID))),QueryFilter(Filter(FilterExpr(ID)))))))'],
         ['from:amy - from:david', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(From),Expr(ID))),Difference,Filter(KeywordFilter(Keyword(From),Expr(ID)))))))']
       ].forEach(([source, expetec]) => testParse(source, expetec))
     })
 
     describe('complex queries', () => {
       [
-        ['(is:important AND label:important)', 'Query(QueryFilter(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID))))))))'],
+        ['(is:important AND label:important)', 'Query(QueryFilter(Filter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID))))))))'],
         ['is:important bla', 'Query(QueryFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),MatchFilter(Expr(ID))))'],
         ['is:important AND label:important bla', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID))))),MatchFilter(Expr(ID))))'],
-        ['(is:important AND label:important) bla', 'Query(QueryFilter(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID))))))),FilterExpr(FilterValue(ID)))'],
-        //['(is:important AND label:important) OR larger:10M', 'Query(QueryFilter(CompositeFilter(OR(QueryFilter(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))))))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchFilter(Empty)))))))'],
-        // ['is:important AND (label:important OR larger:10M)', 'Query(QueryFilter(CompositeFilter(AND(QueryFilter(Filter(Keyword(Is),Expr(ID),MatchFilter(Empty))),QueryFilter(QueryFilter(CompositeFilter(OR(QueryFilter(Filter(Keyword(Label),Expr(ID),MatchFilter(Empty))),QueryFilter(Filter(Keyword(Larger),Expr(ShortID),MatchFilter(Empty)))))))))))'],
-        // ['is:important AND (label:important OR larger:10M) matchLabel', '']
+        ['(is:important AND label:important) bla', 'Query(QueryFilter(Filter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID)))))),MatchFilter(Expr(ID))))'],
+        ['(is:important AND label:important) OR larger:10M', 'Query(QueryFilter(Filter(CompositeFilter(Filter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(KeywordFilter(Keyword(Label),Expr(ID)))))),Union,Filter(KeywordFilter(Keyword(Larger),Expr(ShortID)))))))'],
+        ['is:important AND (label:important OR larger:10M)', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Label),Expr(ID))),Union,Filter(KeywordFilter(Keyword(Larger),Expr(ShortID))))))))))'],
+        ['is:important AND (label:important OR larger:10M) matchLabel', 'Query(QueryFilter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Is),Expr(ID))),Intersection,Filter(Filter(CompositeFilter(Filter(KeywordFilter(Keyword(Label),Expr(ID))),Union,Filter(KeywordFilter(Keyword(Larger),Expr(ShortID)))))))),MatchFilter(Expr(ID))))']
       ].forEach(([source, expetec]) => testParse(source, expetec))
     })
   })

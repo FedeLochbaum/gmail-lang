@@ -10,29 +10,23 @@
 
 @skip { whitespace }
 
-QueryFilter { Filter MatchFilter? | lparen QueryFilter rparen }
+QueryFilter { Filter MatchFilter? }
 
-Filter { KeywordFilter | CompositeFilter }
-
-KeywordFilter { Keyword !colon colon Expr }
+Filter { KeywordFilter | CompositeFilter | lparen Filter rparen }
 
 CompositeFilter { Filter (Union | Intersection | Difference) Filter }
+
+KeywordFilter { Keyword !colon colon Expr }
 
 MatchFilter { Expr }
 
 Expr { ID | String | ShortID | Date | Number | Email | lparen Expr rparen }
-
-ExprOp { Expr (Or | And | Minus) Expr }
 
 FilterExpr { FilterValue | ExactMatch }
 
 FilterValue { ID | String | Email }
 
 ExactMatch { "+" FilterValue }
-
-Or[@name=OR] { !or or }
-And[@name=AND] { !and and }
-Minus[@name=MINUS] { !minus minus }
 
 Union[@name=Union] { !or or }
 Intersection[@name=Intersection] { !and and }
