@@ -2,42 +2,27 @@
   and @left,
   or @left,
   minus @left,
+  colon @left,
   cut @cut
 }
 
-@top Query { QueryFilter }
+@top Query { QueryFilter | FilterExpr }
 
 @skip { whitespace }
 
-QueryFilter { Filter MatchFilter? | lparen QueryFilter rparen | FilterExpr }
+QueryFilter { Filter MatchFilter? | lparen QueryFilter rparen }
 
 Filter { KeywordFilter | CompositeFilter }
 
-KeywordFilter { Keyword colon Expr }
+KeywordFilter { Keyword !colon colon Expr }
 
-CompositeFilter { FilterOrOp | FilterAndOp | FilterMinus }
-
-FilterOrOp[@name=OR] { lparen QueryFilter !or or QueryFilter rparen }
-FilterAndOp[@name=AND] { lparen QueryFilter !and and QueryFilter rparen }
-FilterMinus[@name=MINUS] { lparen QueryFilter !minus minus QueryFilter rparen }
+CompositeFilter { Filter (Union | Intersection | Difference) Filter }
 
 MatchFilter { Expr }
 
-Expr { ID | String | ShortID | Date | Number | Email | lparen Expr rparen | ExprOp }
+Expr { ID | String | ShortID | Date | Number | Email | lparen Expr rparen }
 
-ExprOp { lparen BinaryOp rparen }
-
-BinaryOp { OrOp | AndOp | MinusOp }
-
-OrOp[@name=OR] { Expr !or or Expr }
-AndOp[@name=AND] { Expr !and and Expr }
-MinusOp[@name=MINUS] { Expr !minus minus Expr }
-
-Keyword {
-  from | to | cc | bcc | subject | label | has | list |
-  filename | after | before | older | newer | older_than |
-  newer_than | is | in | deliveredto | category | size | larger | smaller
-}
+ExprOp { Expr (Or | And | Minus) Expr }
 
 FilterExpr { FilterValue | ExactMatch }
 
@@ -45,15 +30,29 @@ FilterValue { ID | String | Email }
 
 ExactMatch { "+" FilterValue }
 
+Or[@name=OR] { !or or }
+And[@name=AND] { !and and }
+Minus[@name=MINUS] { !minus minus }
+
+Union[@name=Union] { !or or }
+Intersection[@name=Intersection] { !and and }
+Difference[@name=Difference] { !minus minus }
+
 Number { number }
 Date { date }
 Email { email }
 ID { variable }
 ShortID { shortVariable }
 
+Keyword {
+  from | to | cc | bcc | subject | label | has | list |
+  filename | after | before | older | newer | older_than |
+  newer_than | is | in | deliveredto | category | size | larger | smaller
+}
+
 @tokens {
   @precedence {
-    date, number, or, and, minus, email, from, to, cc, bcc, subject, label, has, list, filename,
+    date, number, colon, or, and, minus, email, from, to, cc, bcc, subject, label, has, list, filename,
     after, before, older, newer, older_than, newer_than, is, in, deliveredto, category, size, larger,
     smaller, empty, variable, shortVariable, whitespace
   }
