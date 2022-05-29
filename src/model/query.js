@@ -14,16 +14,28 @@ export const QUERY_TYPES = {
   },
 
   KEYWORD_TYPES: {
-    from: 'FROM',
-    cc: 'TO',
-    bcc: 'BCC',
-    to: 'TO',
+    newer_than: 'NEWER_THAN',
+    older_than: 'OLDER_THAN',
+    category: 'CATEGORY',
+    filename: 'FILENAME',
+    subject: 'SUBJECT',
+    before: 'BEFORE',
     label: 'LABEL',
-    subject: 'SUBJECT'
+    after: 'AFTER',
+    older: 'OLDER',
+    newer: 'NEWER',
+    from: 'FROM',
+    bcc: 'BCC',
+    has: 'HAS',
+    cc: 'TO',
+    is: 'IS',
+    to: 'TO',
   },
 
   EXPR_TYPES: {
-    ID: 'ID'
+    ID: 'ID',
+    DATE: 'DATE',
+    SHORT_ID: 'SHORT_ID'
   },
 }
 
@@ -32,6 +44,8 @@ export const toNext = (state, cursor) => { cursor.next(); return cursorToAST(sta
 // Factories
 const Query = (filter, match) => ({ type: QUERY_TYPES.QUERY, filter, match })
 const IdValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.ID, value })
+const ShortIDValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.SHORT_ID, value })
+const DateValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.DATE, value })
 const KeywordFilter = (keyword, value) => ({ type: QUERY_TYPES.FILTER_TYPES.KEYWORD, keyword, value })
 const Keyword = keyword => ({ type: QUERY_TYPES.KEYWORD_TYPES[keyword] })
 
@@ -39,8 +53,6 @@ const filterExprToQueryAST = (state, cursor) => {
   cursor.next()
   return Query(undefined, cursor ? cursorToAST(state, cursor) : undefined)
 }
-
-const idValueAST = (state, cursor) => IdValue(currentTextNode(state, cursor))
 
 const queryFilterToAST = (state, cursor) => {
   cursor.next()
@@ -62,6 +74,10 @@ const keywordToAST = (state, cursor) => {
   return Keyword(currentTextNode(state, cursor))
 }
 
+const idValueAST = (state, cursor) => IdValue(currentTextNode(state, cursor))
+const shortIDValueAST = (state, cursor) => ShortIDValue(currentTextNode(state, cursor))
+const dateValueAST = (state, cursor) => DateValue(currentTextNode(state, cursor))
+
 const toAST = {
   Query: toNext,
   FilterExpr: filterExprToQueryAST,
@@ -72,7 +88,10 @@ const toAST = {
   ExactMatch: toNext,
   FilterValue: toNext,
   Expr: toNext,
+
   ID: idValueAST,
+  ShortID: shortIDValueAST,
+  Date: dateValueAST,
 }
 
 export const typeOf = cursor => cursor?.name
