@@ -17,6 +17,8 @@ export const QUERY_TYPES = {
     newer_than: 'NEWER_THAN',
     older_than: 'OLDER_THAN',
     category: 'CATEGORY',
+    smaller: 'SMALLER',
+    larger: 'LARGER',
     filename: 'FILENAME',
     subject: 'SUBJECT',
     before: 'BEFORE',
@@ -30,12 +32,16 @@ export const QUERY_TYPES = {
     cc: 'TO',
     is: 'IS',
     to: 'TO',
+    in: 'IN',
   },
 
   EXPR_TYPES: {
     ID: 'ID',
     DATE: 'DATE',
-    SHORT_ID: 'SHORT_ID'
+    SHORT_ID: 'SHORT_ID',
+    STRING: 'STRING',
+    EMAIL: 'EMAIL',
+    NUMBER: 'NUMBER',
   },
 }
 
@@ -44,6 +50,9 @@ export const toNext = (state, cursor) => { cursor.next(); return cursorToAST(sta
 // Factories
 const Query = (filter, match) => ({ type: QUERY_TYPES.QUERY, filter, match })
 const IdValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.ID, value })
+const EmailValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.EMAIL, value })
+const StringValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.STRING, value })
+const NumberValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.NUMBER, value })
 const ShortIDValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.SHORT_ID, value })
 const DateValue = value => ({ type: QUERY_TYPES.EXPR_TYPES.DATE, value })
 const KeywordFilter = (keyword, value) => ({ type: QUERY_TYPES.FILTER_TYPES.KEYWORD, keyword, value })
@@ -74,9 +83,7 @@ const keywordToAST = (state, cursor) => {
   return Keyword(currentTextNode(state, cursor))
 }
 
-const idValueAST = (state, cursor) => IdValue(currentTextNode(state, cursor))
-const shortIDValueAST = (state, cursor) => ShortIDValue(currentTextNode(state, cursor))
-const dateValueAST = (state, cursor) => DateValue(currentTextNode(state, cursor))
+const wrapValue = wrapper => (state, cursor) => wrapper(currentTextNode(state, cursor))
 
 const toAST = {
   Query: toNext,
@@ -89,9 +96,14 @@ const toAST = {
   FilterValue: toNext,
   Expr: toNext,
 
-  ID: idValueAST,
-  ShortID: shortIDValueAST,
-  Date: dateValueAST,
+  MatchFilter: toNext,
+
+  ID: wrapValue(IdValue),
+  Email: wrapValue(EmailValue),
+  ShortID: wrapValue(ShortIDValue),
+  Date: wrapValue(DateValue),
+  String: wrapValue(StringValue),
+  Number: wrapValue(NumberValue),
 }
 
 export const typeOf = cursor => cursor?.name

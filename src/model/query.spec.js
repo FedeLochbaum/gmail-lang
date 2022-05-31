@@ -16,6 +16,11 @@ describe('Query', () => {
         filter: undefined,
         match: { type: QUERY_TYPES.EXPR_TYPES.ID, value: 'unicorn' }
       }],
+      ['"dinner movie tonight"', {
+        type: QUERY_TYPES.QUERY,
+        filter: undefined,
+        match: { type: QUERY_TYPES.EXPR_TYPES.STRING, value: '"dinner movie tonight"' }
+      }],
       ['from:amy', {
         type: QUERY_TYPES.QUERY,
         filter: {
@@ -157,6 +162,60 @@ describe('Query', () => {
           type: QUERY_TYPES.FILTER_TYPES.KEYWORD,
           keyword: { type: QUERY_TYPES.KEYWORD_TYPES.older_than },
           value: { type: QUERY_TYPES.EXPR_TYPES.SHORT_ID, value: '2d' }
+        },
+        match: undefined
+      }],
+      ['deliveredto:username@gmail.com', {
+        type: QUERY_TYPES.QUERY,
+        filter: {
+          type: QUERY_TYPES.FILTER_TYPES.KEYWORD,
+          keyword: { type: QUERY_TYPES.KEYWORD_TYPES.deliveredto },
+          value: { type: QUERY_TYPES.EXPR_TYPES.EMAIL, value: 'username@gmail.com' }
+        },
+        match: undefined
+      }],
+      ['list:info@example.com', {
+        type: QUERY_TYPES.QUERY,
+        filter: {
+          type: QUERY_TYPES.FILTER_TYPES.KEYWORD,
+          keyword: { type: QUERY_TYPES.KEYWORD_TYPES.list },
+          value: { type: QUERY_TYPES.EXPR_TYPES.EMAIL, value: 'info@example.com' }
+        },
+        match: undefined
+      }],
+      ['in:anywhere movie', {
+        type: QUERY_TYPES.QUERY,
+        filter: {
+          type: QUERY_TYPES.FILTER_TYPES.KEYWORD,
+          keyword: { type: QUERY_TYPES.KEYWORD_TYPES.in },
+          value: { type: QUERY_TYPES.EXPR_TYPES.ID, value: 'anywhere' }
+        },
+        match: { type: QUERY_TYPES.EXPR_TYPES.ID, value: 'movie' }
+      }],
+      ['size:1000000', {
+        type: QUERY_TYPES.QUERY,
+        filter: {
+          type: QUERY_TYPES.FILTER_TYPES.KEYWORD,
+          keyword: { type: QUERY_TYPES.KEYWORD_TYPES.size },
+          value: { type: QUERY_TYPES.EXPR_TYPES.NUMBER, value: '1000000' }
+        },
+        match: undefined
+      }],
+      ['larger:10M', {
+        type: QUERY_TYPES.QUERY,
+        filter: {
+          type: QUERY_TYPES.FILTER_TYPES.KEYWORD,
+          keyword: { type: QUERY_TYPES.KEYWORD_TYPES.larger },
+          value: { type: QUERY_TYPES.EXPR_TYPES.SHORT_ID, value: '10M' }
+        },
+        match: undefined
+      }],
+      ['smaller:10M', {
+        type: QUERY_TYPES.QUERY,
+        filter: {
+          type: QUERY_TYPES.FILTER_TYPES.KEYWORD,
+          keyword: { type: QUERY_TYPES.KEYWORD_TYPES.smaller },
+          value: { type: QUERY_TYPES.EXPR_TYPES.SHORT_ID, value: '10M' }
         },
         match: undefined
       }],
