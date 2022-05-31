@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Gmail language support for CodeMirror",
   "scripts": {
-    "test": "jest",
+    "test": "yarn prepare; jest",
     "prepare": "rollup -c"
   },
   "type": "module",
