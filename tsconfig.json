@@ -8,5 +8,5 @@
     "moduleResolution": "node",
     "types": [],
   },
-  "include": ["src/*.ts"]
+  "include": ["src/*.ts", "src/index.js"]
 }

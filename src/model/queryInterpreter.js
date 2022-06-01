@@ -33,4 +33,4 @@ export const EVAL_QUERY = {
 
 export const evalQuery = (query, dataSource) => EVAL_QUERY[query.type](query, dataSource)
 
-export const evalLangQuery = (source, dataSource) => evalQuery(sourceToQuery(source), dataSource)
+export const evalSourceQuery = (source, dataSource) => evalQuery(sourceToQuery(source), dataSource)
