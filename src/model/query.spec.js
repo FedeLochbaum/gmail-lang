@@ -1,5 +1,4 @@
 import { sourceToQuery } from "./query"
-import { QUERY_TYPES } from './types'
 import {
   Query,
   IdValue,
