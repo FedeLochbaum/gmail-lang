@@ -1,8 +1,12 @@
 {
   "name": "gmail-lang",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Gmail language support for CodeMirror",
   "author": "Federico Javier Lochbaum <federico.lochbaum@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FedeLochbaum/gmail-lang.git"
+  },
   "scripts": {
     "test": "yarn prepare; jest",
     "prepare": "rollup -c"
