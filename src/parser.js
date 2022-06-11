@@ -3,4 +3,4 @@ import tokenStyle from './style'
 
 export const parserWithMetadata = parser.configure({ props: [tokenStyle] })
 
-export const parse = (source: string) => parserWithMetadata.parse(source)
+export const parse = source => parserWithMetadata.parse(source)
