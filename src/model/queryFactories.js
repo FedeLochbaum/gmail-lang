@@ -14,3 +14,19 @@ export const Keyword = keyword => ({ type: QUERY_TYPES.KEYWORD_TYPES[keyword] })
 export const IntersecOp = () => ({ type: QUERY_TYPES.OPERATIONS.INTERSECTION })
 export const DifferenceOp = () => ({ type: QUERY_TYPES.OPERATIONS.DIFFERENCE })
 export const UnionOp = () => ({ type: QUERY_TYPES.OPERATIONS.UNION })
+
+export default {
+  Query,
+  IdValue,
+  EmailValue,
+  StringValue,
+  NumberValue,
+  ShortIDValue,
+  DateValue,
+  KeywordFilter,
+  CompositeFilter,
+  Keyword,
+  IntersecOp,
+  DifferenceOp,
+  UnionOp,
+}

@@ -1,6 +1,6 @@
 import {LRLanguage, LanguageSupport } from "@codemirror/language"
 import { parserWithMetadata } from './parser'
-import { makeQuery } from './model/query'
+import { makeQuery, sourceToQuery } from './model/query'
 import { evalQuery } from './model/queryInterpreter'
 
 export const parser = parserWithMetadata
@@ -16,5 +16,6 @@ export default {
   Gmail,
   parser,
   makeQuery,
-  evalQuery
+  evalQuery,
+  sourceToQuery
 }
