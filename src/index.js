@@ -1,7 +1,7 @@
 import {LRLanguage, LanguageSupport } from "@codemirror/language"
 import { parserWithMetadata } from './parser'
 import { makeQuery, sourceToQuery } from './model/query'
-import { evalQuery } from './model/queryInterpreter'
+import { evalQuery, evalLangQuery } from './model/queryInterpreter'
 
 export const parser = parserWithMetadata
 
@@ -17,5 +17,6 @@ export default {
   parser,
   makeQuery,
   evalQuery,
-  sourceToQuery
+  sourceToQuery,
+  evalLangQuery
 }

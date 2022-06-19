@@ -30,6 +30,7 @@ The package also exports:
 - `makeQuery`, is a function which receives the code mirror state, a tree and returns the respective query
 - `sourceToQuery` is a function which receives the source code and returns the corresponding Gmail query
 - `evalQuery` is a function which receives a query, a data source and evaluates the query returning the result of evaluating the query.
+- `evalLangQuery` is a function which receives a source and a data source and evaluates the query returning the result of evaluating the query.
 
 The data source must respect the next interface:
 
