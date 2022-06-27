@@ -16,7 +16,7 @@ export default {
   Gmail,
   parser,
   makeQuery,
-  evalQuery,
   sourceToQuery,
+  evalQuery,
   evalLangQuery
 }

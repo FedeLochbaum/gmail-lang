@@ -1,6 +1,6 @@
 {
   "name": "gmail-lang",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Gmail language support for CodeMirror",
   "author": "Federico Javier Lochbaum <federico.lochbaum@gmail.com>",
   "repository": {
