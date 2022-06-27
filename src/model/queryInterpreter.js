@@ -1,14 +1,16 @@
 import { QUERY_TYPES } from './types'
 import { sourceToQuery } from './query'
 
-export const evalQueryNode = ({ filter, match }, dataSource) => {
+export const evalQueryNode = ({ filter, match = {} }, dataSource) => {
   const filteredEmails = evalQuery(filter, dataSource)
-  return dataSource.filterByMatch(filteredEmails, match.value)
+  return dataSource.filterByMatch(filteredEmails, match?.value)
 }
 
-export const evalKeywordFilterNode = ({ keyword, value }, dataSource) => dataSource.allByKeyword(keyword, value.value)
+export const evalKeywordFilterNode = ({ keyword, value = {} }, dataSource) => {
+  return dataSource.allByKeyword(keyword, value?.value)
+}
 
-export const evalCompositeFilterNode = ({ filter1, op, filter2 }, dataSource) => {
+export const evalCompositeFilterNode = ({ filter1, op = {}, filter2 }, dataSource) => {
   const filteredEmails = evalQuery(filter1, dataSource)
   const filteredEmails2 = evalQuery(filter2, dataSource)
   switch (op.type) {
@@ -19,7 +21,7 @@ export const evalCompositeFilterNode = ({ filter1, op, filter2 }, dataSource) =>
     case QUERY_TYPES.OPERATIONS.UNION:
       return dataSource.union(filteredEmails, filteredEmails2)
     default:
-      throw new Error(`Unknown operation: ${op.value}`)
+      throw new Error(`Unknown operation: ${op?.value}`)
   }
 }
 
