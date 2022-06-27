@@ -32,6 +32,7 @@ export const EVAL_QUERY = {
   [QUERY_TYPES.FILTER_TYPES.COMPOSITE]: evalCompositeFilterNode,
 }
 
-export const evalQuery = (query, dataSource) => EVAL_QUERY[query.type](query, dataSource)
+export const evalQuery = (query, dataSource) =>
+  query && EVAL_QUERY[query?.type] ? EVAL_QUERY[query?.type](query, dataSource) : undefined
 
 export const evalLangQuery = (source, dataSource) => evalQuery(sourceToQuery(source), dataSource)
