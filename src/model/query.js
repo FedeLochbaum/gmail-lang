@@ -88,5 +88,8 @@ const toAST = {
 }
 
 export const typeOf = cursor => cursor?.name
-export const cursorToAST = (state, cursor) => toAST[typeOf(cursor)](state, cursor)
+export const cursorToAST = (state, cursor) => {
+  const _type = typeOf(cursor)  
+  return _type && toAST[_type] ? toAST[_type](state, cursor) : undefined
+}
 export const makeQuery = (state, node) => cursorToAST(state, node.cursor())
