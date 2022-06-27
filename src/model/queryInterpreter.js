@@ -1,4 +1,5 @@
 import { QUERY_TYPES } from './types'
+import { sourceToQuery } from './query'
 
 export const evalQueryNode = ({ filter, match }, dataSource) => {
   const filteredEmails = evalQuery(filter, dataSource)
